@@ -1,8 +1,5 @@
 package tictactoe;
 
-import java.math.MathContext;
-import java.nio.file.Paths;
-
 public class Board {
 	
 	//board state final fields
@@ -10,15 +7,13 @@ public class Board {
 	public final int X = 1;
 	public final int O = 2;
 	
-	//board 2d array and width/length final variables
 	private int[][] board;
 	public final int WIDTH;
 	public final int HEIGHT;
 	
-	//number amount in a row you need to win
+	//number of like tiles you need in a row to win
 	final int VICTORYCONDITION = 3;
 	
-	//default constructor
 	public Board(int width, int height) {
 		
 		WIDTH = width;
@@ -37,7 +32,6 @@ public class Board {
 		
 	}
 	
-	//clears the board
 	public void clear() {
 		
 		for (int r = 0; r < WIDTH; r++) {
@@ -62,7 +56,7 @@ public class Board {
 	}
 	
 	//sets the [row][column] location on the board to the given state
-	public void fill(int row, int column, int state) {
+	public void set(int row, int column, int state) {
 		
 		if (state < 0 || state > this.O) {
 			return;
@@ -154,7 +148,6 @@ public class Board {
 		
 	}
 	
-	//returns the number of blank spaces on the board
 	public int numBlankSpaces() {
 		
 		int blanks = 0;
@@ -192,7 +185,7 @@ public class Board {
 				}
 				
 				if (currentBlankNum == n) {
-					b.fill(r, c, state);
+					b.set(r, c, state);
 					return b;
 				}
 				
@@ -351,21 +344,20 @@ public class Board {
 		
 	}
 	
-	//checks if the game is a guaranteed win for the parameter state versus the enemy state
+	//checks if the game is a guaranteed win for the parameter state versus the enemy state. stateTurnStart
 	public boolean isGuaranteedWin(int state, int enemystate, boolean stateTurnStart) {
 		
 		Board b = new Board(WIDTH, HEIGHT);
 		equalizeBoards(b);
-//		b.chooseBestOption(enemystate, state);
-//		b.chooseBestOption(state, enemystate);
 		boolean stateturn = stateTurnStart;
 		while (b.bestOption(state, enemystate) != 0 && !b.isVictory(state) && !b.isVictory(enemystate)) {
 			
-			if (stateturn) 
+			if (stateturn) { 
 				b.chooseBestOption(state, enemystate);
-			else 
+			}
+			else { 
 				b.chooseBestOption(enemystate, state);
-			
+			}
 			stateturn = !stateturn;
 		}
 		
@@ -420,7 +412,7 @@ public class Board {
 				if ((r > 0 && c > 0)
 					&&(r < board.length - 1) && (c < board[0].length - 1)
 					&& (get(r,c) == EMPTY)) {
-					fill(r,c,state);
+					set(r,c,state);
 					return true;
 				}
 				
@@ -443,7 +435,7 @@ public class Board {
 //					System.out.println(r + " " + c);
 //					System.out.println((int)(2-r) + " " + (int)(2-c));
 					if (get(2-r,2-c) == EMPTY) {
-						fill(2-r,2-c,state);
+						set(2-r,2-c,state);
 						return true;
 					}
 				}
@@ -468,12 +460,12 @@ public class Board {
 						&& (c == 0 || c == (board[0].length - 1))
 						&& (get(r,c) == EMPTY)) {
 					
-					b.fill(r, c, state);
+					b.set(r, c, state);
 					if (b.isGuaranteedWin(enemystate, state, true)) {
 						return false;
 					}
 					
-					fill(r,c,state);
+					set(r,c,state);
 					return true;
 					
 				}
@@ -496,7 +488,7 @@ public class Board {
 						&& (get(r,c) == EMPTY)) {
 					
 //					System.out.println(r + " " + c + " is a side");
-					fill(r,c,state);
+					set(r,c,state);
 					return true;
 					
 				}
@@ -514,7 +506,7 @@ public class Board {
 		for (int r = 0; r < WIDTH; r++) {
 			for (int c = 0; c < WIDTH; c++) {
 				
-				b.fill(r, c, this.get(r, c));
+				b.set(r, c, this.get(r, c));
 				
 			}
 		}

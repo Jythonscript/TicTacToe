@@ -15,17 +15,15 @@ public class TicTacScreen extends JFrame implements Runnable{
 	Image dbImage;
 	Graphics dbGraphics;
 	
-	//board field
 	Board board;
 	
-	//board dimensions
 	final int BOARDWIDTH  = 3;
 	final int BOARDHEIGHT = 3;
 	
 	//pixel width of each slot on the board
 	final int BOXWIDTH = 100;
 	
-	//x and y offset of the board from the point (0, 0). used for the jframe
+	//x and y offset of the board and everything on in from the point (0, 0)
 	final int XOFFSET = 50;
 	final int YOFFSET = 50;
 	
@@ -33,15 +31,12 @@ public class TicTacScreen extends JFrame implements Runnable{
 	final int SCREENWIDTH = BOXWIDTH * BOARDWIDTH + (2 * XOFFSET);
 	final int SCREENHEIGHT = BOXWIDTH * BOARDHEIGHT + (2 * YOFFSET);
 	
-	//state of the game. state IDs below
 	int gamestate;
-	
 	final int XTURN = 1;
 	final int OTURN = 2;
 	final int XVICTORY = 3;
 	final int OVICTORY = 4;
 	final int TIEGAME = 5;
-	//x turn, o turn, x victory, o victory, tie game
 	
 	//main thread
 	public void run() {
@@ -61,7 +56,6 @@ public class TicTacScreen extends JFrame implements Runnable{
 		
 	}
 	
-	//default constructor
 	public TicTacScreen() {
 		
 		//sets up the state of the game
@@ -118,10 +112,10 @@ public class TicTacScreen extends JFrame implements Runnable{
 //			System.out.println(blockX + ", " + blockY);
 			
 			if (e.isShiftDown()) {
-				board.fill(blockX, blockY, board.O);
+				board.set(blockX, blockY, board.O);
 			}
 			else {
-				board.fill(blockX, blockY, board.X);				
+				board.set(blockX, blockY, board.X);				
 			}
 			
 			if (board.isVictory(board.X)) {
@@ -154,10 +148,6 @@ public class TicTacScreen extends JFrame implements Runnable{
 				break;
 			
 			case KeyEvent.VK_X:
-//				board.makeTurn(board.X);
-//				System.out.println(board.placeInCorner(board.X));
-//				System.out.println(board.getForkIndex(board.X, board.O));
-//				System.out.println(board.createFork(board.X, board.O));
 				board.makeTurn(board.X);
 				System.out.println();
 				if (board.isVictory(board.X)) {
@@ -197,27 +187,39 @@ public class TicTacScreen extends JFrame implements Runnable{
 	//prints stuff to the JFrame
 	public void paintComponent(Graphics g) {
 		
+		int ovalOffset = BOXWIDTH / 8;
+		int crossOffset = BOXWIDTH / 4;
+		int ovalWidth = (BOXWIDTH * 3) / 4;
+		
 		//prints the board
 		for (int r = 0; r < board.WIDTH; r++) {
-			//prints the horizontal lines on the board
+			
+			int cellXLocation = XOFFSET + r * BOXWIDTH;
+			
+			//draws the horizontal lines that make up the grid
 			if (r != 0) {
-				g.drawLine(XOFFSET + r * BOXWIDTH, YOFFSET, XOFFSET + r * BOXWIDTH, YOFFSET + board.HEIGHT * BOXWIDTH);
+				g.drawLine(cellXLocation, YOFFSET, cellXLocation, YOFFSET + board.HEIGHT * BOXWIDTH);
 			}
 			for (int c = 0; c < board.HEIGHT; c++) {
-				//draws the vertical lines on the board
+				
+				int cellYLocation = YOFFSET + c * BOXWIDTH;
+				
+				//draws the vertical lines that make up the grid
 				if (c != 0) {
-					g.drawLine(XOFFSET, YOFFSET + c * BOXWIDTH, XOFFSET + board.WIDTH * BOXWIDTH, YOFFSET + c * BOXWIDTH);
+					g.drawLine(XOFFSET, cellYLocation, XOFFSET + board.WIDTH * BOXWIDTH, cellYLocation);
 				}
-				//draws Xs & Os
+				
 				if (board.get(r, c) == board.O) {
-					g.drawOval(XOFFSET + r * BOXWIDTH + (BOXWIDTH / 8), YOFFSET + c * BOXWIDTH + (BOXWIDTH / 8), (BOXWIDTH * 3) / 4, (BOXWIDTH * 3) / 4);
+					//draws O's on the board
+					g.drawOval(cellXLocation + ovalOffset, cellYLocation + ovalOffset, ovalWidth, ovalWidth);
 				}
-				else if (board.get(r,  c) == board.X) {
-					g.drawLine(XOFFSET + r * BOXWIDTH + (BOXWIDTH / 4), YOFFSET + c * BOXWIDTH + (BOXWIDTH / 4),
-							XOFFSET + (r + 1) * BOXWIDTH - (BOXWIDTH / 4), YOFFSET + (c + 1) * BOXWIDTH - (BOXWIDTH / 4));
+				else if (board.get(r, c) == board.X) {
+					//draws two lines that make up the X
+					g.drawLine(cellXLocation + crossOffset, YOFFSET + (c) * BOXWIDTH + crossOffset,
+							XOFFSET + (r + 1) * BOXWIDTH - crossOffset, YOFFSET + (c + 1) * BOXWIDTH - crossOffset);
 					
-					g.drawLine(XOFFSET + r * BOXWIDTH + (BOXWIDTH / 4), YOFFSET + (c + 1) * BOXWIDTH - (BOXWIDTH / 4),
-							XOFFSET + (r + 1) * BOXWIDTH - (BOXWIDTH / 4), YOFFSET + c * BOXWIDTH + (BOXWIDTH / 4));
+					g.drawLine(cellXLocation + crossOffset, YOFFSET + (c + 1) * BOXWIDTH - crossOffset,
+							XOFFSET + (r + 1) * BOXWIDTH - crossOffset, YOFFSET + (c) * BOXWIDTH + crossOffset);
 				}
 				
 			}

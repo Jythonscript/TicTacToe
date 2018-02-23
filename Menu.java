@@ -2,8 +2,6 @@ package tictactoe;
 
 import java.awt.Graphics;
 import java.awt.Image;
-import java.io.File;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -13,7 +11,6 @@ public class Menu extends JFrame implements Runnable{
 	Image dbImage;
 	Graphics dbGraphics;
 	
-	//screen dimensions
 	final int SCREENWIDTH = 500;
 	final int SCREENHEIGHT = 500;
 	
@@ -38,9 +35,8 @@ public class Menu extends JFrame implements Runnable{
 		
 	}
 	
-	//double buffering
-	public void paint(Graphics g) {
-		
+	public void paint(Graphics g) {		
+		//double buffering
 		dbImage = createImage(getWidth(), getHeight());
 		dbGraphics = dbImage.getGraphics();
 		paintComponent(dbGraphics);
