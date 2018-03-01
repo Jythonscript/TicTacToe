@@ -11,6 +11,7 @@ public class Board {
 	public final int WIDTH;
 	public final int HEIGHT;
 	
+	
 	//number of like tiles you need in a row to win
 	final int VICTORYCONDITION = 3;
 	
@@ -146,6 +147,14 @@ public class Board {
 		
 		return false;
 		
+	}
+	
+	public boolean isTieGame(int state, int enemystate) {
+		
+		return (numBlankSpaces() == 0 
+				&& !isVictory(state)
+				&& !isVictory(enemystate));
+				
 	}
 	
 	public int numBlankSpaces() {
