@@ -105,6 +105,8 @@ public class TicTacScreen extends JFrame implements Runnable{
 		
 		public void mouseReleased(MouseEvent e) {
 			
+			//places an X or a O based on the mouse position 
+			
 			//gets mouse coordinates
 			int x = e.getX();
 			int y = e.getY();
@@ -134,25 +136,25 @@ public class TicTacScreen extends JFrame implements Runnable{
 			
 //			System.out.println(blockX + ", " + blockY);
 			
-			if (e.isShiftDown()) {
+			if (e.isShiftDown() && board.get(blockX, blockY) == board.EMPTY) {
 				board.set(blockX, blockY, board.O);
 			}
-			else {
+			else if (!e.isShiftDown() && board.get(blockX, blockY) == board.EMPTY) {
 				board.set(blockX, blockY, board.X);				
 			}
 			
 			if (board.isVictory(board.X)) {
 				gamestate = XVICTORY;
-				System.out.println("X Wins\n");
+//				System.out.println("X Wins\n");
 				return;
 			}
 			else if (board.isVictory(board.O)) {
 				gamestate = OVICTORY;
-				System.out.println("O Wins\n");
+//				System.out.println("O Wins\n");
 				return;
 			}
 			else if (board.isTieGame(board.X, board.O)) {
-				System.out.println("Tie game");
+//				System.out.println("Tie game\n");
 				gamestate = TIEGAME;
 				return;
 			}

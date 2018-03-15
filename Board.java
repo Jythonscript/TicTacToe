@@ -281,7 +281,11 @@ public class Board {
 	//makes a turn for the parameter state. unlike chooseBestOption, it checks all of the eight scenarios
 	public void makeTurn(int state) {
 		
-		int blanks = numBlankSpaces();
+		//the board that the testing will be done on
+		Board b = new Board(WIDTH, HEIGHT);
+		
+		//makes the board a copy of the current board
+		this.equalizeBoards(b);
 		
 		//determines the enemy state
 		int enemystate;
@@ -292,29 +296,22 @@ public class Board {
 			enemystate = 2;
 		}
 		
-		//covers 1 and 2
+		//fork index used for option 4 
+		int enemyForkIndex = getForkIndex(enemystate, state);
+		
+		//covers optinos 1 and 2
 		if (bestOption(state, enemystate) != 0) {
 			chooseBestOption(state, enemystate);
 //			System.out.println("\nOption 1 or 2\n");
 			return;
 		}
-		
-		//the board that the testing will be done on
-		Board b = new Board(WIDTH, HEIGHT);
-		
-		//makes the board a copy of the current board
-		this.equalizeBoards(b);
-		
 		//covers option 3
-		if (createFork(state, enemystate) ) {
+		else if (createFork(state, enemystate) ) {
 //			System.out.println("\nOption 3\n");
 			return;
 		}
-		
 		//covers option 4
-		int enemyForkIndex = getForkIndex(enemystate, state);
-//		System.out.println(enemyForkIndex);
-		if (enemyForkIndex != -1) {
+		else if (enemyForkIndex != -1) {
 			b.fillNthBlankWithState(enemyForkIndex, state);
 //			System.out.println(b.isGuaranteedWin(enemystate, state, true));
 			if (!b.isGuaranteedWin(enemystate, state, true)) {
@@ -322,29 +319,26 @@ public class Board {
 //				System.out.println("\nOption 4\n");
 				return;
 			}
+			this.equalizeBoards(b);
 		}
-		this.equalizeBoards(b);
-		
 		//covers option 5
-		if (placeInCenter(state)) {
+		else if (placeInCenter(state)) {
 //			System.out.println("\nOption 5\n");
 			return;
 		}
-		
 		//covers option 6
-		if (placeInOppositeCorner(state, enemystate)) {
+		else if (placeInOppositeCorner(state, enemystate)) {
 //			System.out.println("\nOption 6\n");
 			return;
 		}
 		
 		//covers option 7
-		if (placeInCorner(state, enemystate)) {
+		else if (placeInCorner(state, enemystate)) {
 //			System.out.println("\nOption 7\n");
 			return;
 		}
-		
 		//covers option 8
-		if (placeInSide(state, enemystate)) {
+		else if (placeInSide(state, enemystate)) {
 //			System.out.println("\nOption 8\n");
 			return;
 		}
